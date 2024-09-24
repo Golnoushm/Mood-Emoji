@@ -1,0 +1,67 @@
+/*
+Experiment 1: Pressure
+
+Pressure-Sensetive Mood emoji
+
+GolnoushM 
+
+DIGF-6037 Creation & Computation
+
+Credits: 
+Kate Hartman & Nick Pucket
+
+// Define the pins for the LEDs
+int greenLEDs[] = {2, 3, 4, 5, 6, 7};  // Green LEDs
+int redLEDs[] = {8, 9, 10, 11, 12, 13};  // Red LEDs
+
+// Define the pressure sensor pin
+const int pressurePin = A0;  // Pressure sensor connected to analog pin A0
+
+// Pressure thresholds
+int lowPressure = 150;  // Low pressure threshold
+int highPressure = 600;  // High pressure threshold
+
+void setup() {
+  // Set all LED pins as output
+  for (int i = 0; i < 6; i++) {
+    pinMode(greenLEDs[i], OUTPUT);
+    pinMode(redLEDs[i], OUTPUT);
+  }
+  
+  // Initialize serial communication (for debugging)
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Read the pressure sensor value
+  int pressureValue = analogRead(pressurePin);
+  
+  // Print pressure value to serial monitor (for testing)
+  Serial.println(pressureValue);
+  
+  // Determine pressure levels and control LEDs
+  if (pressureValue < lowPressure) {
+    // Low pressure: Turn on green LEDs, turn off red LEDs
+    for (int i = 0; i < 6; i++) {
+      digitalWrite(greenLEDs[i], HIGH);
+      digitalWrite(redLEDs[i], LOW);
+    }
+  } 
+  else if (pressureValue >= lowPressure) {
+    // High pressure: Turn on red LEDs, turn off green LEDs
+    for (int i = 0; i < 6; i++) {
+      digitalWrite(greenLEDs[i], LOW);
+      digitalWrite(redLEDs[i], HIGH);
+    }
+  } 
+  else {
+    // Medium pressure: Turn off all LEDs
+    for (int i = 0; i < 6; i++) {
+      digitalWrite(greenLEDs[i], LOW);
+      digitalWrite(redLEDs[i], LOW);
+    }
+  }
+  
+  // Small delay to stabilize readings
+  delay(100);
+}
